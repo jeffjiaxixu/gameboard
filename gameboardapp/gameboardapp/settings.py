@@ -48,9 +48,7 @@ MEDIA_URL = os.path.join(APP_ROOT, "media/")
 #     }
 # }
 
-# TODO Comment OUT for production deployment!
 DEBUG = True
-SECRET_KEY = ')d^b%0zo!1vgvlzlq+3bml-idi*weg%yu58y3-_t*$jw&@vv*1'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
