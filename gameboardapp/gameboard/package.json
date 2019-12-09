@@ -1,0 +1,25 @@
+{
+  "name": "gameboard",
+  "version": "1.0.0",
+  "description": "Charts for Gameboard Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cmu-webapps/final-project--group-game-statistics-tracker.git"
+  },
+  "keywords": [
+    "GameBoard"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cmu-webapps/final-project--group-game-statistics-tracker/issues"
+  },
+  "homepage": "https://github.com/cmu-webapps/final-project--group-game-statistics-tracker#readme",
+  "dependencies": {
+    "chart.js": "^2.9.3"
+  }
+}

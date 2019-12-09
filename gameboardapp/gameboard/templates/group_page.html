@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/player.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox-thumbs.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox-buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+{% endblock %}
+
+{% block header_scripts %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/chart-2.8.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-media.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-thumbs.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wow.js' %}"></script>
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'js/custom-chart.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+        <div class="title animated wow fadeInDown clearfix">
+            <h3 id="group-name" style="font-weight: 5px;font-size: 35pt;">{% block title %}{{data.group_name}}{% endblock %}</h3>
+            <hr>
+        </div>
+        <div class = "title animated wow fadeIn">
+            <a id="edit-group-btn" class="btn btn-outline-primary" href="{% url 'edit_group' %}"> Edit Group </a>
+            <a id="data-entry-btn" class="btn btn-outline-primary" href="{% url 'data_entry' %}"> Add Data </a>
+        <hr>
+        </div>
+        <div class="shadow"></div>
+
+    <!-- for future use when we add admins to group -->
+    <!--
+        <div>
+            <h2 class='subtitle'>Admins</h2>
+            <div class="row">
+                {% for player in data.admins %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                        </div><br><div class="row">
+                    {% endif %}
+                    <div class="col-4">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <h5 class="card-title">{{player.user.first_name}} {{player.user.last_name}}</h5>
+                                <p class="card-text">
+                                <p>Username: {{player.user.username}}</p>
+                                <p>Date of Birth: {{player.date_of_birth}}</p>
+                                <a href="#" class="btn btn-primary">{{player.user.first_name}}'s Profile</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+        </div>
+        -->
+    <div>
+        <!-- hidden field for chart data -->
+        <p hidden id="games_per_day_chart_info">{{data.games_played_by_date}}</p>
+        <p hidden id="top_5_winners_chart_info">{{data.top_5_winners}}</p>
+        <p hidden id="top_5_games_chart_info">{{data.top_5_games}}</p>
+
+        <div class="title animated wow fadeIn">
+            <h2>Overall Game Play</h2>
+            <h3>How is your group doing?</h3>
+            <hr class="separator"/>
+        </div>
+{#        {% endfor %}#}
+    </div>
+</div> 
+<div>
+    <!-- hidden field for chart data -->
+    <p hidden id="games_per_day_chart_info">{{data.games_played_by_date}}</p>
+    <p hidden id="top_5_winners_chart_info">{{data.top_5_winners}}</p>
+    <p hidden id="top_5_games_chart_info">{{data.top_5_games}}</p>
+
+    <div class="row">
+        <div class="col-4">
+            <canvas id="gamesPlayed" style="width:100px; height:100px;"></canvas>
+        </div>
+        <div class="col-4">
+            <canvas id="winsDonut" width="800" height="450"></canvas>
+        </div>
+        <div class="col-4">
+            <canvas id="popGame" width="800" height="600"></canvas>
+        </div>
+
+    </div>
+
+    <div class="title animated wow fadeIn">
+        <h2>Group Stats</h2>
+        <h3>Here are some group statistics...</h3>
+        <hr class="separator"/>
+    </div>
+
+    <div class="row" >
+        <div class="col-4 emphasis animated wow fadeInDown">
+            <h2><strong>{{data.num_games_played}}</strong></h2>
+            <p><small>Total Games Played</small></p>
+        </div>
+        <div class="col-4 emphasis animated wow fadeInDown">
+            <h2><strong>{{data.num_players}}</strong></h2>
+            <p><small>Players</small></p>
+        </div>
+        <div class="col-4 emphasis animated wow fadeInDown">
+            <h2><strong>{{data.best_player}} ({{data.best_player_win_rate}}%)</strong></h2>
+            <p><small>Best Player (Win Percentage)</small></p>
+        </div>
+    </div>
+    <div class="row align-items-center " style="margin: 10px">
+        <div class="col-6 emphasis animated wow fadeInDown">
+            <h2><strong>{{data.most_active_player}} <br>({{data.most_active_played}} games played)</strong></h2>
+            <p><small>Most Active Player</small></p>
+        </div>
+        <div class="col-6 emphasis animated wow fadeInDown">
+            <h2><strong>{{data.favorite_game}} <br>({{data.favorite_game_played}} games played)</strong></h2>
+            <p><small>Favorite Game</small></p>
+        </div>
+    </div>
+
+        <div>
+            <div class="title animated wow fadeIn">
+                <h2>All Players</h2>
+                <h3>All of the players in your group...</h3>
+                <hr class="separator"/>
+            </div>
+
+            <div class="row">
+                {% for player in data.players %}
+                    {% if forloop.counter0|divisibleby:4 %}
+            </div><br>
+            <div class="row">
+                    {% endif %}
+                    <div class="col-3 animated wow fadeInDown">
+                        <a href="{% url 'player' player %}">
+                            <div class="card" style="width: 20rem;">
+                                <div class="card-body">
+                                    <div class="client">
+                                        <div class="client_details">
+                                          <h1> {{player.user.first_name}} {{player.user.last_name}} </h1>
+                                            {% if player.profile_image %}
+                                              <img src='{{ player.profile_image.url }}' width="250" height="175" alt="Profile image">
+                                            {% else %}
+                                              <img class="logo" src="{% static 'images/Profile.png' %}" alt="Profile image" style="width:150px;height:150px;">
+                                          {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+                </div>
+
+        <div>
+            <div class="title animated wow fadeIn">
+                <h2>Recent Games</h2>
+                <h3>What games have you been playing?</h3>
+                <hr class="separator"/>
+            </div>
+
+            <table class="table table-striped">
+                {% for game in data.recent_games %}
+                    <tr>
+                        <th scope="row">{{game.0.game.name}}</th>
+                        <td>{{game.0.date}}</td>
+                        <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{game.1}}">Read More</button></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        </div>
+{% endblock %}
+
+
+{% block modal_placeholder %}
+    {% for game in data.recent_games %}
+        <div class="modal" id="{{game.1}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="z-index: 9999;" >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">{{game.0.game.name}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Date: </strong>{{game.0.date}}</p>
+                        <p><strong>Players: </strong>{{ game.0.players.all|join:", " }}</p>
+                        <p><strong>Winner(s): </strong>{{ game.0.winners.all|join:", " }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $('#{{game.1}}').on('shown.bs.modal', function () {
+                $('#{{game.1}}').trigger('focus')
+            })
+        </script>
+    {% endfor %}
+{% endblock %}

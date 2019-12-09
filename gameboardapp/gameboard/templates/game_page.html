@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<container>
+  <div class="card card-image" style="background-image: url(./static/images/catan.jpeg); ">
+          <!-- Content -->
+    <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4" style ="margin: 10px;">
+      <div >
+        <h3 class="card-title backgroundimage_text" style="text-align: center"> <strong>Settlers of Catan</strong></h3>
+        <p class="backgroundimage_text" style="text-align: center"> The Settlers of Catan is a multiplayer board game. Players assume the roles of settlers and attempt to build and develop holdings while trading and acquiring resources. Players gain points as their settlements grow.</p>
+      </div>
+    </div>
+  </div>
+
+
+    <h2 style="text-align: center; margin: 15px"> Friend Group 1 </h2>
+    <div class="row" style="margin: 15px">
+      <h3 > Players </h3> 
+      <p>Ryan, Jane, Josh, Jackie </p>
+    </div>
+
+    <div class="row" style="margin: 15px">
+      <h3> Game Statistics </h3>
+      <button class="submit" href="{% url 'group_page' %}"> add game statistics </button>
+    </div>
+    <div class="row">
+      <img src="./static/images/graph.png" style = "max-width: 50%">
+      <img src="./static/images/graph.png" style = "max-width: 50%">
+    </div>
+
+</container>
+
+<style>
+.backgroundimage_text {
+    color: #fff;
+    text-align: center;
+    text-shadow: 2px 0 0 #000, 0 -2px 0 #000, 0 2px 0 #000, -2px 0 0 #000;
+}
+</style>
+{% endblock %}

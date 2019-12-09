@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Register / Login{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div id="page-content" class="container-fluid">
+        <div class="container">
+            <div class="row register-padding">
+                <div class="col-5">
+                    <h1>Register</h1>
+                    <div class="horizontal-separator"></div>
+                    <form action="{% url 'register_login' %}" method="POST" enctype="multipart/form-data" >
+                        {% csrf_token %}
+                        {{ register_form.non_field_errors }}
+                        {% for field in register_form.visible_fields %}
+                        <div class="form-group">{{field.label_tag}}{{field}}
+                            <span class=“error”>{{field.errors}}</span>
+                        </div>
+                        {% endfor %}
+{#                        <label for="exampleFormControlFile1" class="col-sm-10 col-form-label" >Add Profile Photo:</label>#}
+{#                        <input type="file" class="form-control" name="photo">#}
+
+                        <button  id="register-submit" type="submit" class="btn btn-primary" name="submit" value="register">Submit</button>
+                    </form>
+                </div>
+                <div class="col-2 text-center">
+                    <div class="vertical-separator"></div>
+                </div>
+                <div class="col-5">
+                    <h1>Log In</h1>
+                    <div class="horizontal-separator"></div>
+                    <form action="{% url 'register_login' %}" method="POST">
+                        {% csrf_token %}
+                        {{ login_form.non_field_errors }}
+                        {% for field in login_form.visible_fields %}
+                        <div class="form-group">{{field.label_tag}}{{field}}
+                            <span class=“error”>{{field.errors}}</span>
+                        </div>
+                        {% endfor %}
+                        <button id="login-submit" type="submit" class="btn btn-primary" name="submit" value="login">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

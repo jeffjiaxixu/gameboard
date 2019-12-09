@@ -1,0 +1,84 @@
+
+.autocomplete {
+    /*the container must be positioned relative:*/
+    position: relative;
+    display: inline-block;
+}
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    /*position the autocomplete items to be the same width as the container:*/
+    top: 100%;
+    left: 0;
+    right: 0;
+}
+.autocomplete-items div {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}
+.autocomplete-items div:hover {
+    /*when hovering an item:*/
+    background-color: #e9e9e9;
+}
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: DodgerBlue !important;
+    color: #ffffff;
+}
+
+.list-group-item {
+    user-select: none;
+}
+
+.list-group input[type="checkbox"] {
+    display: none;
+}
+
+.list-group input[type="checkbox"] + .list-group-item {
+    cursor: pointer;
+}
+
+.list-group input[type="checkbox"] + .list-group-item:before {
+    content: "\2713";
+    color: transparent;
+    font-weight: bold;
+    margin-right: 1em;
+}
+
+.list-group input[type="checkbox"]:checked + .list-group-item {
+    background-color: #0275D8;
+    color: #FFF;
+}
+
+.list-group input[type="checkbox"]:checked + .list-group-item:before {
+    color: inherit;
+}
+
+.list-group input[type="radio"] {
+    display: none;
+}
+
+.list-group input[type="radio"] + .list-group-item {
+    cursor: pointer;
+}
+
+.list-group input[type="radio"] + .list-group-item:before {
+    content: "\2022";
+    color: transparent;
+    font-weight: bold;
+    margin-right: 1em;
+}
+
+.list-group input[type="radio"]:checked + .list-group-item {
+    background-color: #0275D8;
+    color: #FFF;
+}
+
+.list-group input[type="radio"]:checked + .list-group-item:before {
+    color: inherit;
+}

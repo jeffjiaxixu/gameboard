@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block css %}
+    {% load static %}
+    <link href="{% static 'css/player.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <h1> Edit Group </h1>
+    <div class="container">
+        <form action="{% url 'edit_group' %}" method="POST" enctype="multipart/form-data" >
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-2">
+                    {{ form.group_name }}
+                </div>
+
+                <div class="col-2 dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ form.remove_player.label }}
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        {{ form.remove_player }}
+                    </div>
+                </div>
+
+                <div class="col-2 dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ form.add_player.label }}
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div><a href="#">{{ form.add_player }}</a></div>
+                    </div>
+                </div>
+
+                <div class="col-2 dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ form.make_admin.label }}
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div><a href="#">{{ form.make_admin }}</a></div>
+                    </div>
+                </div>
+
+                <div class="col-2 dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown">{{ form.make_player.label }}
+                        <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <div><a href="#">{{ form.make_player }}</a></div>
+                    </div>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn  btn-primary" name="submit" value="edit_group" style="background-color: #eb592d;">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %}{{player.user.first_name}} {{player.user.last_name}}{% endblock %}
+
+{% block css %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/player.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox-thumbs.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox-buttons.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/fancybox.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+{% endblock %}
+
+{% block header_scripts %}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'js/chart-2.8.0.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-media.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fancybox-thumbs.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/wow.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/custom-chart.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <p hidden id="games_per_day_chart_info">{{stats.games_played_by_date}}</p>
+    <p hidden id="wins_by_game_chart_info">{{stats.wins_by_game}}</p>
+    <p hidden id="top_5_games_chart_info">{{stats.top_5_games}}</p>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 profile-header">
+                <div class="row profile-item profile-picture justify-content-center">
+                    {% if player.profile_image %}
+                        <img src='{{ player.profile_image.url }}' width="250" height="175" alt="Profile image">
+                    {% else %}
+                        <img class="logo" src="{% static 'images/Profile.png' %}" alt="Profile image" style="width:150px;height:150px;">
+                    {% endif %}
+                </div>
+
+                <div class="row profile-item profile-name justify-content-center">
+                    <h2 id="user-full-name" class="">{{player.user.first_name}} {{player.user.last_name}}</h2>
+                </div>
+
+                <div class="row profile-item profile-stats justify-content-center">
+                    <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#total_win_modal">
+                        <div class="col-12 emphasis" style="text-align: left;">
+                            <p style="color: black;"><strong>Total Wins: </strong><br>{{ stats.num_wins }}</p>
+                        </div>
+                    </button>
+
+                    <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#num_played_modal">
+                        <div class="col-12 emphasis" style="text-align: left;">
+                            <p style="color: black;"><strong>Total Games: </strong><br>{{ stats.num_played }}</p>
+                        </div>
+                    </button>
+
+                    <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#fav_game_modal">
+                        <div class="col-12 emphasis" style="text-align: left;">
+                            <p style="color: black;"><strong>Favorite Game: </strong><br>{{ stats.fav_game }}</p>
+                        </div>
+                    </button>
+                </div>
+                {% if user.username == player.user.username %}
+                    <div class="row profile-item profile-actions justify-content-center" style="margin-bottom: 15px; margin-top: 10px;">
+                        <div class="col-4">
+                            <a id="edit-profile-btn" class="btn btn-outline-primary" href="{% url 'edit_player' %}">Edit Profile</a>
+                        </div>
+                        <div class="col-4">
+                            <a id="logout-btn" class="btn btn-outline-danger" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            {% if user.username == player.user.username %}
+                {% for group in groups %}
+                    <div class="col-3 border">
+                        <div class="row justify-content-center">
+                            <a  class="" href="{% url 'group_page' %}" style="position: absolute; top: 0; left: 0; height: 48px; width: 100%;"></a>
+                            <h2>{{ group.name }}</h2>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div>
+                                <h7>Admins</h7>
+                            </div>
+                            <div>
+                                {% for admin in group.admins %}
+                                    <a href="{% url 'player' admin %}">
+
+                                      {% if admin.profile_image %}
+                                          <img src='{{ admin.profile_image.url }}' width="40" height="40" data-toggle="tooltip" data-placement="top" title="{{ admin }}" alt="Profile image">
+                                      {% else %}
+                                          <img class="logo" src="{% static 'images/Profile.png' %}" alt="Profile image" data-toggle="tooltip" data-placement="top" title="{{ admin }}"style="width:40px;height:40px;">
+                                      {% endif %}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <div>
+                                <h7>Players</h7>
+                            </div>
+                            <div>
+                                {% for player in group.players %}
+                                    <a href="{% url 'player' player %}">
+                                      {% if player.profile_image %}
+                                          <img src='{{ player.profile_image.url }}' width="40" height="40"data-toggle="tooltip" data-placement="top" title="{{ player }}" alt="Profile image">
+                                      {% else %}
+                                          <img class="logo" src="{% static 'images/Profile.png' %}" alt="Profile image" data-toggle="tooltip" data-placement="top" title="{{ player }}" style="width:40px;height:40px;">
+                                      {% endif %}
+
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="row profile-item profile-stats">
+                    <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#win_percentage_modal">
+                        <div class="col-12 emphasis" style="text-align: left;">
+                            <p style="color: black;"><strong>Win rate: </strong><br>
+                            {{ stats.win_percentage }}</p>
+                        </div>
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if message == "You are not in a group" %}
+    <h1>{{message}}</h1>
+    {% endif %}
+
+    <script type="text/javascript">
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
+{% endblock %}
+
+{% block modal_placeholder %}
+    <div class="modal fade" id="total_win_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Games Won by Game</h5>
+                </div>
+                <div class="modal-body">
+                    <canvas id="winsBar" width="800" height="450"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="num_played_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Games Played by Date</h5>
+                </div>
+                <div class="modal-body">
+                    <canvas id="gamesPlayed" style="width:100px; height:100px;"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="fav_game_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">Top 5 Games</h5>
+                </div>
+                <div class="modal-body">
+                    <canvas id="popGame" style="width:100px; height:100px;"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'js/profile-charts.js' %}"></script>
+{% endblock %}
